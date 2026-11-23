@@ -5,7 +5,7 @@
    os arquivos que o site usa, já no tamanho certo, em WebP e JPG:
 
      fotos-originais/hero.jpg            → public/img/hero.webp/.jpg            (1920x1080)
-     fotos-originais/hero-retrato.jpg    → public/img/hero-retrato.webp/.jpg    (900x1600)
+     fotos-originais/hero-retrato.jpg    → public/img/hero-retrato.webp/.jpg    (720x1280)
         (opcional: se não existir, é recortada da hero.jpg)
      fotos-originais/eventos/<id>.jpg    → public/img/eventos/<id>.webp/.jpg    (800x1000)
      fotos-originais/galeria/<nome>.jpg  → public/img/galeria/<nome>.webp/.jpg  (1600x1200 ou 1200x1600)
@@ -73,12 +73,32 @@ async function listarFotos(pasta) {
   return (await readdir(pasta)).filter((f) => EXTENSOES.includes(path.extname(f).toLowerCase())).map((f) => path.join(pasta, f));
 }
 
+// Fotos pequenas demais para o tamanho pedido (avisadas no fim).
+const pequenas = new Map(); // nome do arquivo -> descrição (uma linha por foto)
+
 // Salva uma imagem recortada no tamanho exato, em WebP e JPG.
-async function salvar(entrada, destinoSemExtensao, largura, altura) {
+// Opções: qualidade do WebP e do JPG, e se aplica nitidez ao ampliar.
+async function salvar(entrada, destinoSemExtensao, largura, altura, { webp = 76, jpg = 80, nitidez = true } = {}) {
   await mkdir(path.dirname(destinoSemExtensao), { recursive: true });
-  const base = sharp(entrada).rotate().resize(largura, altura, { fit: 'cover', position: 'attention' });
-  await base.clone().webp({ quality: 76 }).toFile(`${destinoSemExtensao}.webp`);
-  await base.clone().jpeg({ quality: 80, mozjpeg: true, progressive: true }).toFile(`${destinoSemExtensao}.jpg`);
+  const m = await sharp(entrada).metadata();
+  // Quanto a foto precisa ser ampliada para cobrir o tamanho pedido.
+  const ampliacao = Math.max(largura / (m.width || largura), altura / (m.height || altura));
+  let base = sharp(entrada).rotate().resize(largura, altura, { fit: 'cover', position: 'attention', kernel: 'lanczos3' });
+  if (ampliacao > 7) {
+    // Ampliação extrema (ex.: miniatura virando foto de topo): os blocos da
+    // compressão viram quadrados enormes. O desfoque é feito ANTES de ampliar,
+    // no tamanho original, onde apaga as bordas dos blocos; o resultado é um
+    // fundo suave, que funciona bem atrás do texto do topo.
+    const suavizada = await sharp(entrada).rotate().blur(1.3).toBuffer();
+    base = sharp(suavizada).resize(largura, altura, { fit: 'cover', position: 'attention', kernel: 'cubic' }).blur(2);
+    pequenas.set(path.basename(entrada), `${path.basename(entrada)} (${m.width}x${m.height} px, desfocada no topo/ampliada para não pixelar)`);
+  } else if (ampliacao > 1.5) {
+    // Ampliar deixa a foto "lavada"; uma nitidez leve compensa um pouco.
+    if (nitidez) base = base.sharpen({ sigma: 1.2 });
+    if (!pequenas.has(path.basename(entrada))) pequenas.set(path.basename(entrada), `${path.basename(entrada)} (${m.width}x${m.height} px)`);
+  }
+  await base.clone().webp({ quality: webp, effort: 6, smartSubsample: true }).toFile(`${destinoSemExtensao}.webp`);
+  await base.clone().jpeg({ quality: jpg, mozjpeg: true, progressive: true }).toFile(`${destinoSemExtensao}.jpg`);
   console.log(`  ✓ ${path.relative(raiz, destinoSemExtensao)} (${largura}x${altura})`);
 }
 
@@ -129,9 +149,12 @@ console.log(`Lendo fotos de: ${origem}\n`);
 const hero = await acharArquivo(origem, 'hero');
 if (hero) {
   console.log('Topo (hero):');
-  await salvar(hero, path.join(pastaImg, 'hero'), 1920, 1080);
+  // A foto do topo é a primeira coisa a carregar: compressão mais forte e sem
+  // nitidez artificial (ela fica sob um véu escuro, a diferença não aparece).
+  const opcoesTopo = { webp: 55, jpg: 66, nitidez: false };
+  await salvar(hero, path.join(pastaImg, 'hero'), 1920, 1080, opcoesTopo);
   const heroRetrato = (await acharArquivo(origem, 'hero-retrato')) || hero;
-  await salvar(heroRetrato, path.join(pastaImg, 'hero-retrato'), 900, 1600);
+  await salvar(heroRetrato, path.join(pastaImg, 'hero-retrato'), 720, 1280, opcoesTopo);
   await gerarImagemCompartilhamento(hero);
 }
 
@@ -174,3 +197,10 @@ for (const t of espaco.tiposDeEvento.filter((x) => x.cartao)) {
   }
 }
 console.log(problemas ? `\n${problemas} ponto(s) para corrigir.` : '  Tudo certo.');
+
+if (pequenas.size) {
+  console.log(`\nAtenção: ${pequenas.size} foto(s) muito pequena(s) para o tamanho em que aparecem no site.`);
+  console.log('Elas foram ampliadas e vão parecer sem nitidez, principalmente no topo. Troque pela versão');
+  console.log('original (do dono ou do fotógrafo) com o mesmo nome e rode "npm run fotos" de novo:');
+  for (const p of pequenas.values()) console.log(`  - ${p}`);
+}

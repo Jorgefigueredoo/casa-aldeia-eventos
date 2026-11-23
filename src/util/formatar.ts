@@ -28,6 +28,10 @@ export const TAMANHOS = {
 /** Tamanho da miniatura da galeria conforme a orientação. */
 export const tamanhoMiniatura = (o: Orientacao): readonly [number, number] => (o === 'paisagem' ? [600, 450] : [450, 600]);
 
+/** Link do WhatsApp com a mensagem já escrita. */
+export const linkWhatsApp = (mensagem: string, numero = espaco.contato.whatsapp): string =>
+  `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+
 /** Junta classes CSS, ignorando as vazias: classes('a', cond && 'b'). */
 export const classes = (...lista: (string | false | null | undefined)[]): string => lista.filter(Boolean).join(' ');
 

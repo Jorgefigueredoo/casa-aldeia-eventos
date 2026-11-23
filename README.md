@@ -3,7 +3,7 @@
 Site de um espaço de eventos feito em **React + TypeScript + Vite**. No build, a
 página é **pré-renderizada** em HTML estático: o visitante, o Google e o WhatsApp
 recebem a página pronta, e o React só assume depois para deixar galeria,
-formulário e perguntas interativos. O resultado é uma pasta `dist/` com
+filtro e perguntas interativos. O resultado é uma pasta `dist/` com
 arquivos estáticos, servida pelo Nginx.
 
 O molde é reutilizável: **todos os dados do negócio ficam em `src/dados-espaco.ts`**.
@@ -14,7 +14,7 @@ src/
   tipos.ts             formato dos dados (o editor avisa se algo estiver errado)
   App.tsx              ordem das seções e o aviso "Página de exemplo"
   componentes/         uma parte da página por arquivo
-  util/                regras do formulário (telefone, data, mensagem) e formatação
+  util/                formatação e link do WhatsApp
   estilo.css           visual: cores, fontes, layout, modo escuro
   main.tsx             entrada no navegador
   prerender.tsx        entrada usada no build para gerar o HTML pronto
@@ -68,9 +68,9 @@ Campos que exigem atenção:
 | `urlDoSite` | Domínio definitivo, com `https://`. Sem ele a foto não aparece no WhatsApp. |
 | `avaliacao.nota` / `total` | Atualize quando mudar no Google e rode o build. |
 | `depoimentos[].ilustrativo` | Enquanto for `true`, o cartão mostra "Texto ilustrativo". Cole avaliações **reais** do Google e troque para `false`: só aí aparece "Avaliação no Google". |
-| `capacidadeMaxima` | Número de convidados. Quando preenchido, vai para o Google e o formulário avisa (sem bloquear) quem passar do limite. |
+| `capacidadeMaxima` | Número de convidados. Quando preenchido, vai para o Google. |
 | `localizacao.buscaNoMapa` | Se o mapa marcar o lugar errado, use o nome exato do perfil no Google Maps. |
-| `tiposDeEvento[].naMensagem` | Como o tipo aparece na frase do WhatsApp: "...está livre para **festa de 15 anos**". |
+| `consulta.mensagem` | Texto que já vem escrito no WhatsApp ao tocar em "Consultar minha data" (topo, menu e faixa de consulta). |
 
 Fora do arquivo de dados, só duas coisas mudam por cliente:
 
@@ -82,9 +82,24 @@ Fora do arquivo de dados, só duas coisas mudam por cliente:
 
 ## 3. Trocar as fotos
 
-As fotos atuais são **placeholders cinza** nas proporções certas, com o nome de
-cada foto escrito nelas. Nos componentes, um comentário `FOTO REAL` marca onde
-cada uma entra.
+As fotos atuais são **provisórias**: miniaturas de 225 × 161 px tiradas da busca
+do Google, que estão em `fotos-originais/`. Nos cartões e na galeria elas passam
+bem, mas no topo a ferramenta precisou desfocá-las para não pixelar, e no
+lightbox ficam sem nitidez.
+
+**O ideal é pedir os originais ao dono ou ao fotógrafo.** Enquanto isso, dá para
+pegar versões bem maiores das mesmas fotos no perfil do espaço no Google Maps:
+abra a foto, clique com o botão direito em "Abrir imagem em nova guia" e, no
+endereço (`https://lh3.googleusercontent.com/...=w400-h300...`), troque o
+trecho depois do `=` por `s2000`. Salve por cima do arquivo de mesmo nome em
+`fotos-originais/` e rode `npm run fotos`. Antes de publicar, confirme com o
+dono que as fotos são dele (ou do fotógrafo dele) e podem ser usadas no site.
+
+Hoje há fotos só de **casamento** e **do espaço**, por isso a galeria tem esses
+filtros. Os outros cartões (formatura, 15 anos etc.) usam fotos do espaço e,
+ao serem tocados, mostram a galeria inteira. Quando chegarem fotos desses
+eventos, é só adicioná-las à galeria com o `tipo` certo: o botão de filtro
+aparece sozinho.
 
 ### Jeito rápido (recomendado)
 
@@ -117,7 +132,7 @@ tamanhos estão declarados no código para a página não "pular" enquanto carre
 | Arquivo | Tamanho (px) | Formatos |
 |---|---|---|
 | `hero` | 1920 × 1080 | `.webp` e `.jpg` |
-| `hero-retrato` | 900 × 1600 | `.webp` e `.jpg` |
+| `hero-retrato` | 720 × 1280 | `.webp` e `.jpg` |
 | `eventos/<id>` | 800 × 1000 | `.webp` e `.jpg` |
 | `galeria/<nome>` (deitada) | 1600 × 1200 | `.webp` e `.jpg` |
 | `galeria/<nome>` (em pé) | 1200 × 1600 | `.webp` e `.jpg` |
@@ -225,7 +240,7 @@ sudo certbot --nginx -d casaldeiaeventos.com.br -d www.casaldeiaeventos.com.br
 - [ ] Confirmar com o dono os campos marcados `PENDENTE` no `src/dados-espaco.ts`:
       capacidade, buffet, horário limite, domínio e as três referências de proximidade.
 - [ ] Colocar o link das avaliações do Google em `avaliacao.link`. A faixa de nota vira link.
-- [ ] Trocar as fotos (`npm run fotos`).
+- [ ] Trocar as fotos provisórias pelas originais (`npm run fotos`) e confirmar a autorização de uso.
 - [ ] `npm run build` e enviar o `dist/`.
 - [ ] Rodar o Lighthouse (Chrome → F12 → Lighthouse) no endereço publicado.
 
@@ -244,10 +259,8 @@ sudo certbot --nginx -d casaldeiaeventos.com.br -d www.casaldeiaeventos.com.br
   mudam ele). O lightbox usa o `<dialog>` nativo, que prende o foco e fecha com
   Esc. Navega com as setas e com arraste no celular (arrastar para baixo fecha)
   e percorre só as fotos do filtro ativo.
-- **Formulário**: regras em `src/util/consulta.ts`. Não aceita data no passado e
-  confere o DDD (lista da Anatel) e o formato do celular brasileiro (11 dígitos
-  começando com 9, ou fixo com 10). Ao enviar, monta a mensagem pelo
-  `modeloDaMensagem` e abre `wa.me`. Não há backend.
+- **Consulta de data**: sem formulário e sem backend. Os botões "Consultar"
+  (topo, menu e faixa azul) abrem `wa.me` com o texto de `consulta.mensagem`.
 - **Desempenho**: só a foto do topo carrega de imediato. As outras são `lazy` e
   o mapa do Google só é criado quando a seção se aproxima. Sem JavaScript de
   terceiros; o único recurso externo é o Google Fonts.

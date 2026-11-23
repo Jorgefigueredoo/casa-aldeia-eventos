@@ -8,10 +8,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { espaco } from '../dados-espaco.ts';
-import { linkWhatsApp } from '../util/consulta.ts';
 import { atraso, CabecalhoSecao, useRevelar } from './Base.tsx';
 import { Icone, IconeWhatsApp } from './Icones.tsx';
-import { enderecoCompleto } from '../util/formatar.ts';
+import { enderecoCompleto, linkWhatsApp } from '../util/formatar.ts';
 
 // --- 8. Perguntas frequentes -----------------------------------------------------
 
@@ -138,7 +137,7 @@ export function Rodape() {
           </p>
           <p>
             <IconeWhatsApp tamanho={18} />
-            <a href={linkWhatsApp(c.whatsapp, c.mensagemPadrao)} target="_blank" rel="noopener">
+            <a href={linkWhatsApp(c.mensagemPadrao)} target="_blank" rel="noopener">
               WhatsApp {c.whatsappExibicao}
             </a>
           </p>
@@ -166,7 +165,7 @@ export function WhatsAppFlutuante() {
   return (
     <a
       className="whatsapp-flutuante"
-      href={linkWhatsApp(espaco.contato.whatsapp, espaco.contato.mensagemPadrao)}
+      href={linkWhatsApp(espaco.contato.mensagemPadrao)}
       target="_blank"
       rel="noopener"
       aria-label="Conversar pelo WhatsApp"

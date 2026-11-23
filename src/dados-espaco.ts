@@ -59,7 +59,7 @@ export const espaco: DadosEspaco = {
 
     // Descrição da imagem de compartilhamento, para leitores de tela.
     altImagemCompartilhamento:
-      'CasAldeia Eventos ao entardecer, com a nota 5,0 no Google e 80 avaliações',
+      'Cerimônia montada no gramado do CasAldeia Eventos, com a nota 5,0 no Google e 80 avaliações',
 
     // Cor da barra do navegador no celular (modo claro e modo escuro).
     corDoTema: '#13294b',
@@ -85,7 +85,7 @@ export const espaco: DadosEspaco = {
     // Usuário do Instagram, sem o @.
     instagram: 'casaldeiaeventos',
 
-    // Horário de atendimento comercial, mostrado perto do formulário e no rodapé.
+    // Horário de atendimento comercial, mostrado na seção de consulta e no rodapé.
     atendimento: 'Atendimento comercial até 17h',
 
     // Explicação curta para quem manda mensagem fora do horário (de noite, por exemplo).
@@ -122,12 +122,13 @@ export const espaco: DadosEspaco = {
   // Topo da página (hero)
   // ---------------------------------------------------------------------------
   hero: {
-    // Texto do botão principal. Ele leva até o formulário de consulta.
+    // Texto do botão principal. Ele abre o WhatsApp já com a mensagem de
+    // consulta de data (consulta.mensagem, mais abaixo).
     chamada: 'Consultar minha data',
     // Descrição da foto do topo, para leitores de tela e para o Google.
     // A foto em si fica em public/img/hero.jpg / .webp (computador) e
     // public/img/hero-retrato.jpg / .webp (celular em pé).
-    alt: 'Vista do espaço CasAldeia ao entardecer, com o gramado e a área da piscina',
+    alt: 'Cerimônia de casamento montada no gramado ao lado da piscina, com arco de flores e palmeiras',
   },
 
   // ---------------------------------------------------------------------------
@@ -135,7 +136,7 @@ export const espaco: DadosEspaco = {
   // "texto" é a frase de apoio abaixo dele (pode ficar vazia: '').
   // ---------------------------------------------------------------------------
   secoes: {
-    eventos: { sobretitulo: 'Celebrações', titulo: 'Cada evento, no seu tom', texto: 'Toque em um tipo de evento para ver as fotos dele na galeria.' },
+    eventos: { sobretitulo: 'Celebrações', titulo: 'Cada evento, no seu tom', texto: 'Toque em um cartão para ver as fotos na galeria.' },
     galeria: { sobretitulo: 'Galeria', titulo: 'Veja como fica', texto: '' },
     espaco: { sobretitulo: 'O espaço', titulo: 'Natureza, piscina e gramado' },
     depoimentos: { sobretitulo: 'Quem celebrou aqui', titulo: 'O que dizem os clientes', texto: '' },
@@ -146,101 +147,88 @@ export const espaco: DadosEspaco = {
 
   // ---------------------------------------------------------------------------
   // Tipos de evento atendidos
-  // - id: identificador curto, sem espaço nem acento (liga cartão, galeria e formulário).
-  // - nome: como aparece no cartão e na lista do formulário.
-  // - naMensagem: como o tipo entra na frase do WhatsApp ("...está livre para ___").
+  // - id: identificador curto, sem espaço nem acento (liga cartão e galeria).
+  // - nome: como aparece no cartão e no Google (lista de serviços).
   // - descricao: frase curta no cartão.
   // - cartao: true = aparece na grade de cartões com foto (public/img/eventos/<id>).
   // - destaque: true = cartão maior, ocupando duas colunas (use em um só).
-  // - alt: descrição da foto do cartão.
-  // Todos os tipos aparecem na lista do formulário, na ordem abaixo.
+  // - alt: descrição da foto do cartão (descreva o que aparece na foto).
+  // Os tipos sem cartão também valem: vão para o Google como serviços oferecidos.
   // ---------------------------------------------------------------------------
   tiposDeEvento: [
     {
       id: 'casamento',
       nome: 'Casamento',
-      naMensagem: 'casamento',
       descricao: 'Cerimônia no gramado e recepção ao ar livre, cercadas pela mata de Aldeia.',
       cartao: true,
       destaque: true,
-      alt: 'Cerimônia de casamento montada no gramado ao entardecer',
+      alt: 'Cerimônia montada no gramado, com cadeiras, arco de flores e a piscina ao fundo',
     },
     {
       id: 'mini-wedding',
       nome: 'Mini wedding',
-      naMensagem: 'mini wedding',
       descricao: 'Para quem quer só as pessoas mais próximas, sem abrir mão de nada.',
       cartao: true,
-      alt: 'Mesa posta para um mini wedding ao ar livre',
+      alt: 'Corredor da cerimônia enfeitado com flores, sob a pérgola do espaço',
     },
     {
       id: 'noivado',
       nome: 'Noivado',
-      naMensagem: 'noivado',
       cartao: false,
     },
     {
       id: 'formatura',
       nome: 'Formatura',
-      naMensagem: 'formatura',
       descricao: 'Espaço amplo para a turma, as famílias e a festa que segue noite adentro.',
       cartao: true,
-      alt: 'Festa de formatura com pista de dança iluminada',
+      alt: 'Festa à noite no gramado, com mesas, palmeiras e luzes quentes',
     },
     {
       id: '15-anos',
       nome: '15 anos',
-      naMensagem: 'festa de 15 anos',
       descricao: 'Valsa, pista e fotos inesquecíveis num cenário verde.',
       cartao: true,
-      alt: 'Debutante na entrada da festa de 15 anos',
+      alt: 'Entrada do espaço com muros de pedra e cordão de luzes à noite',
     },
     {
       id: 'aniversario',
       nome: 'Aniversário',
-      naMensagem: 'aniversário',
       cartao: false,
     },
     {
       id: 'infantil',
       nome: 'Infantil',
-      naMensagem: 'festa infantil',
       descricao: 'Gramado e espaço de sobra para as crianças brincarem à vontade.',
       cartao: true,
-      alt: 'Decoração de festa infantil montada no gramado',
+      alt: 'Gramado amplo ao lado da piscina, em dia de sol',
     },
     {
       id: 'corporativo',
       nome: 'Corporativo',
-      naMensagem: 'evento corporativo',
       descricao: 'Confraternizações, conferências e encontros longe do escritório.',
       cartao: true,
-      alt: 'Evento corporativo com convidados reunidos na área externa',
+      alt: 'Vista aérea do espaço ao entardecer, com tenda e mesas montadas',
     },
     {
       id: 'escolar',
       nome: 'Evento escolar',
-      naMensagem: 'evento escolar',
       cartao: false,
     },
     {
       id: 'religioso',
       nome: 'Religioso',
-      naMensagem: 'evento religioso',
       descricao: 'Celebrações, retiros e encontros num ambiente de paz e natureza.',
       cartao: true,
-      alt: 'Celebração religiosa ao ar livre com cadeiras no gramado',
+      alt: 'Casa principal do espaço ao entardecer, cercada de jardim',
     },
     {
       id: 'tematica',
       nome: 'Festa temática',
-      naMensagem: 'festa temática',
       cartao: false,
     },
     {
       id: 'outro',
       nome: 'Outro tipo de evento',
-      naMensagem: 'um evento',
       cartao: false,
     },
   ],
@@ -258,24 +246,18 @@ export const espaco: DadosEspaco = {
   // - legenda: texto opcional embaixo da foto ampliada.
   // ---------------------------------------------------------------------------
   galeria: [
-    { arquivo: 'img/galeria/casamento-01', tipo: 'casamento', orientacao: 'paisagem', alt: 'Cerimônia de casamento no gramado ao pôr do sol', legenda: 'Cerimônia no gramado' },
-    { arquivo: 'img/galeria/casamento-02', tipo: 'casamento', orientacao: 'retrato', alt: 'Noivos caminhando entre as árvores do espaço', legenda: 'Fotos entre as árvores' },
-    { arquivo: 'img/galeria/casamento-03', tipo: 'casamento', orientacao: 'paisagem', alt: 'Recepção de casamento com mesas iluminadas à noite', legenda: 'Recepção ao ar livre' },
-    { arquivo: 'img/galeria/casamento-04', tipo: 'casamento', orientacao: 'paisagem', alt: 'Mesa de doces do casamento com flores', legenda: 'Mesa de doces' },
-    { arquivo: 'img/galeria/mini-wedding-01', tipo: 'mini-wedding', orientacao: 'paisagem', alt: 'Mesa única posta para mini wedding', legenda: 'Mesa única para os mais próximos' },
-    { arquivo: 'img/galeria/mini-wedding-02', tipo: 'mini-wedding', orientacao: 'retrato', alt: 'Arco de flores do mini wedding', legenda: 'Altar de flores' },
-    { arquivo: 'img/galeria/formatura-01', tipo: 'formatura', orientacao: 'paisagem', alt: 'Formandos reunidos na pista de dança', legenda: 'Baile de formatura' },
-    { arquivo: 'img/galeria/formatura-02', tipo: 'formatura', orientacao: 'paisagem', alt: 'Área externa preparada para a festa de formatura', legenda: 'Montagem da festa' },
-    { arquivo: 'img/galeria/15-anos-01', tipo: '15-anos', orientacao: 'retrato', alt: 'Debutante posando no jardim', legenda: 'Ensaio no jardim' },
-    { arquivo: 'img/galeria/15-anos-02', tipo: '15-anos', orientacao: 'paisagem', alt: 'Salão decorado para a festa de 15 anos', legenda: 'Decoração da festa' },
-    { arquivo: 'img/galeria/corporativo-01', tipo: 'corporativo', orientacao: 'paisagem', alt: 'Confraternização de empresa na área externa', legenda: 'Confraternização de fim de ano' },
-    { arquivo: 'img/galeria/corporativo-02', tipo: 'corporativo', orientacao: 'paisagem', alt: 'Auditório montado para conferência', legenda: 'Formato conferência' },
-    { arquivo: 'img/galeria/religioso-01', tipo: 'religioso', orientacao: 'paisagem', alt: 'Celebração religiosa ao ar livre', legenda: 'Celebração ao ar livre' },
-    { arquivo: 'img/galeria/religioso-02', tipo: 'religioso', orientacao: 'retrato', alt: 'Detalhe do altar montado no gramado', legenda: 'Altar no gramado' },
-    { arquivo: 'img/galeria/infantil-01', tipo: 'infantil', orientacao: 'paisagem', alt: 'Mesa de festa infantil temática', legenda: 'Mesa temática' },
-    { arquivo: 'img/galeria/infantil-02', tipo: 'infantil', orientacao: 'paisagem', alt: 'Crianças brincando no gramado', legenda: 'Gramado livre para brincar' },
-    { arquivo: 'img/galeria/espaco-01', tipo: 'espaco', orientacao: 'paisagem', alt: 'Piscina do espaço cercada pela mata', legenda: 'A piscina' },
-    { arquivo: 'img/galeria/espaco-02', tipo: 'espaco', orientacao: 'paisagem', alt: 'Gramado amplo do espaço ao fim da tarde', legenda: 'O gramado' },
+    // FOTOS PROVISÓRIAS: miniaturas de 225 px tiradas da busca do Google.
+    // Troque em fotos-originais/ pela versão original (mesmo nome) e rode "npm run fotos".
+    { arquivo: 'img/galeria/casamento-cerimonia', tipo: 'casamento', orientacao: 'paisagem', alt: 'Cerimônia montada no gramado, com cadeiras, arco de flores e a piscina ao fundo', legenda: 'Cerimônia no gramado' },
+    { arquivo: 'img/galeria/casamento-altar', tipo: 'casamento', orientacao: 'paisagem', alt: 'Corredor da cerimônia enfeitado com flores, sob a pérgola', legenda: 'Altar sob a pérgola' },
+    { arquivo: 'img/galeria/espaco-entardecer', tipo: 'espaco', orientacao: 'paisagem', alt: 'Casa principal do espaço ao entardecer, cercada de jardim e palmeiras', legenda: 'A casa ao entardecer' },
+    { arquivo: 'img/galeria/espaco-piscina-noite', tipo: 'espaco', orientacao: 'paisagem', alt: 'Piscina iluminada de azul à noite, com a casa ao fundo', legenda: 'A piscina à noite' },
+    { arquivo: 'img/galeria/espaco-gramado', tipo: 'espaco', orientacao: 'paisagem', alt: 'Gramado, piscina e pérgola do espaço em dia de sol', legenda: 'Gramado e piscina' },
+    { arquivo: 'img/galeria/espaco-piscina', tipo: 'espaco', orientacao: 'paisagem', alt: 'Piscina cercada de gramado, palmeiras e mata', legenda: 'A piscina' },
+    { arquivo: 'img/galeria/espaco-evento-noite', tipo: 'espaco', orientacao: 'paisagem', alt: 'Evento à noite no gramado, com convidados nas mesas e palmeiras iluminadas', legenda: 'Festa no gramado' },
+    { arquivo: 'img/galeria/espaco-entrada', tipo: 'espaco', orientacao: 'paisagem', alt: 'Entrada do espaço com muros de pedra e cordão de luzes à noite', legenda: 'A entrada' },
+    { arquivo: 'img/galeria/espaco-aerea-entardecer', tipo: 'espaco', orientacao: 'paisagem', alt: 'Vista aérea do espaço ao entardecer, com tenda e mesas montadas no gramado', legenda: 'Vista do alto' },
+    { arquivo: 'img/galeria/espaco-aerea', tipo: 'espaco', orientacao: 'paisagem', alt: 'Vista aérea de cima do espaço, cercado pela mata de Aldeia', legenda: 'Cercado pela mata' },
   ],
 
   // Categorias da galeria que não são tipos de evento (ex.: fotos do próprio
@@ -287,15 +269,14 @@ export const espaco: DadosEspaco = {
   // ---------------------------------------------------------------------------
 
   // Capacidade máxima de convidados (só o número), ou null enquanto não souber.
-  // PENDENTE: perguntar ao dono. Quando preenchida, ela vai para o Google e o
-  // formulário avisa (sem bloquear) quando alguém digitar um número maior.
+  // PENDENTE: perguntar ao dono. Quando preenchida, ela vai para o Google.
   capacidadeMaxima: null,
 
   // Foto grande da seção "O espaço" (reaproveita uma foto da galeria).
   fotoDoEspaco: {
-    arquivo: 'img/galeria/espaco-01',
+    arquivo: 'img/galeria/espaco-gramado',
     orientacao: 'paisagem',
-    alt: 'Piscina e área externa do espaço cercadas pela mata',
+    alt: 'Gramado, piscina e pérgola do espaço em dia de sol',
   },
 
   // Texto de abertura da seção "O espaço".
@@ -351,15 +332,15 @@ export const espaco: DadosEspaco = {
   ],
 
   // ---------------------------------------------------------------------------
-  // Consulta de data (formulário)
+  // Consulta de data (faixa com botão de WhatsApp, sem formulário)
   // ---------------------------------------------------------------------------
   consulta: {
     titulo: 'Consulte sua data',
-    texto: 'Preencha em menos de um minuto. Ao enviar, o WhatsApp abre com a sua mensagem pronta, é só tocar em enviar.',
-    // Modelo da mensagem enviada. As palavras entre chaves são trocadas pelo
-    // que a pessoa preencheu: {data} {tipo} {convidados} {nome} {whatsapp}
-    modeloDaMensagem:
-      'Olá! Gostaria de saber se o dia {data} está livre para {tipo}, aproximadamente {convidados} convidados. Meu nome é {nome} e meu WhatsApp é {whatsapp}.',
+    texto: 'Toque no botão e fale direto com a gente no WhatsApp. A mensagem já vai escrita: é só dizer a data, o tipo de evento e quantos convidados.',
+    // Texto do botão desta seção.
+    botao: 'Consultar pelo WhatsApp',
+    // Mensagem que já vem escrita no WhatsApp (botão do topo e desta seção).
+    mensagem: 'Olá! Vim pelo site da CasAldeia e gostaria de saber se uma data está disponível para o meu evento.',
   },
 
   // ---------------------------------------------------------------------------
@@ -371,7 +352,7 @@ export const espaco: DadosEspaco = {
       // 'O espaço recebe até 250 convidados em formato de festa...'.
       pergunta: 'Quantos convidados o espaço comporta?',
       resposta:
-        'A capacidade varia conforme o formato do evento: cerimônia no gramado, recepção com mesas ou coquetel. Informe o número aproximado de convidados na consulta de data e indicamos a melhor configuração para você.',
+        'A capacidade varia conforme o formato do evento: cerimônia no gramado, recepção com mesas ou coquetel. Conte pelo WhatsApp o número aproximado de convidados e indicamos a melhor configuração para você.',
     },
     {
       // PENDENTE: confirmar se o buffet é próprio, terceirizado ou livre.

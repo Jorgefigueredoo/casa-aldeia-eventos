@@ -4,7 +4,7 @@
    ========================================================================== */
 
 import { espaco } from '../dados-espaco.ts';
-import { formatarNota } from '../util/formatar.ts';
+import { formatarNota, linkWhatsApp } from '../util/formatar.ts';
 import { Estrelas } from './Base.tsx';
 
 /** Faixa discreta "Página de exemplo". Para remover, apague a linha dela no App.tsx. */
@@ -30,7 +30,7 @@ export function Topo() {
         <a href="#perguntas">Perguntas</a>
         <a href="#localizacao">Localização</a>
       </nav>
-      <a className="topo__acao" href="#consulta">
+      <a className="topo__acao" href={linkWhatsApp(espaco.consulta.mensagem)} target="_blank" rel="noopener">
         Consultar data
       </a>
     </header>
@@ -42,7 +42,7 @@ export function Hero() {
   return (
     <section className="hero" id="inicio" aria-labelledby="hero-titulo">
       {/* FOTO REAL: substitua public/img/hero.webp + hero.jpg (1920x1080, deitada)
-          e public/img/hero-retrato.webp + hero-retrato.jpg (900x1600, celular em pé).
+          e public/img/hero-retrato.webp + hero-retrato.jpg (720x1280, celular em pé).
           Ideal: o espaço ao entardecer. Mantenha os mesmos nomes de arquivo. */}
       <picture className="hero__foto">
         <source media="(orientation: portrait)" type="image/webp" srcSet="img/hero-retrato.webp" />
@@ -55,7 +55,8 @@ export function Hero() {
           {espaco.nome}
         </h1>
         <p className="hero__slogan">{espaco.slogan}</p>
-        <a className="botao botao--claro" href="#consulta">
+        {/* Abre o WhatsApp com a mensagem de consulta de data já escrita. */}
+        <a className="botao botao--claro" href={linkWhatsApp(espaco.consulta.mensagem)} target="_blank" rel="noopener">
           {espaco.hero.chamada}
         </a>
       </div>

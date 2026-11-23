@@ -25,8 +25,24 @@ function seoDoEspaco(): Plugin {
   };
 }
 
+/**
+ * A página chega pronta (pré-renderizada), então o JavaScript não é necessário
+ * para a primeira pintura. Baixar a prioridade dele deixa a banda livre para a
+ * foto do topo, que é o que o visitante vê primeiro (e o que o Google mede).
+ */
+function scriptSemPressa(): Plugin {
+  return {
+    name: 'script-sem-pressa',
+    apply: 'build',
+    transformIndexHtml: {
+      order: 'post',
+      handler: (html) => html.replace(/<script type="module" crossorigin/g, '<script type="module" fetchpriority="low" crossorigin'),
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react(), seoDoEspaco()],
+  plugins: [react(), seoDoEspaco(), scriptSemPressa()],
   build: {
     target: 'es2020',
     // Arquivos com hash no nome (ex.: index-a1b2c3.js): podem ficar em cache

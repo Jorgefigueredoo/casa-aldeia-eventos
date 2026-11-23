@@ -14,7 +14,7 @@
    8. Galeria e lightbox
    9. O espaço
    10. Depoimentos
-   11. Consulta de data (formulário)
+   11. Consulta de data (faixa com botão de WhatsApp)
    12. Perguntas frequentes
    13. Localização
    14. Rodapé e botão de WhatsApp
@@ -36,7 +36,7 @@
   --texto: #0f1b2d;
   --texto-suave: #4a5568;
   --linha: #e2e7ef;            /* divisórias e bordas finas */
-  --linha-forte: #b4bdcc;      /* borda dos campos do formulário */
+  --linha-forte: #b4bdcc;      /* bordas mais marcadas (filtros, ícones) */
 
   /* Azul-marinho (marca) */
   --destaque: #13294b;         /* ícones e detalhes */
@@ -366,10 +366,15 @@ button { cursor: pointer; }
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(to bottom, rgba(8, 15, 30, 0.55), rgba(8, 15, 30, 0.25) 45%, rgba(8, 15, 30, 0.55));
+  background: linear-gradient(to bottom, rgba(8, 15, 30, 0.55), rgba(8, 15, 30, 0.4) 45%, rgba(8, 15, 30, 0.6));
 }
 
-.hero__conteudo { max-width: 46rem; }
+.hero__conteudo {
+  max-width: 46rem;
+  /* Sombra suave: mantém o texto legível sobre partes claras da foto */
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.35);
+}
+.hero__conteudo .botao { text-shadow: none; }
 
 .hero__titulo {
   font-family: var(--fonte-titulo);
@@ -786,11 +791,11 @@ a.prova__conteudo:hover .prova__texto { text-decoration: underline; }
 
 /* -----------------------------------------------------------------------------
    11. CONSULTA DE DATA
+   Faixa azul com chamada e um botão grande que abre o WhatsApp.
    -------------------------------------------------------------------------- */
 .secao--consulta {
   background: var(--faixa-fundo);
   color: var(--sobre-faixa);
-  scroll-margin-top: 0;
 }
 .secao--consulta:focus { outline: none; }
 
@@ -799,97 +804,59 @@ a.prova__conteudo:hover .prova__texto { text-decoration: underline; }
   gap: 2.5rem;
   max-width: var(--largura);
   margin-inline: auto;
+  text-align: center;
 }
 
-.consulta__texto { margin-top: 1.25rem; color: var(--sobre-faixa-suave); max-width: 30rem; }
+.consulta__cabecalho { max-width: 36rem; margin-inline: auto; }
+.consulta__cabecalho .sobretitulo::after {
+  content: '';
+  width: 1.75rem;
+  height: 1px;
+  background: var(--dourado);
+}
+.consulta__texto { margin-top: 1.25rem; color: var(--sobre-faixa-suave); text-wrap: pretty; }
 
-.consulta__garantias { display: grid; gap: 0.85rem; margin-top: 2rem; }
+.consulta__acao { display: grid; justify-items: center; gap: 0.75rem; }
+
+/* Botão principal da página: branco sobre o azul, com o logo do WhatsApp */
+.botao--destaque {
+  min-height: 3.75rem;
+  padding: 1rem 2.25rem;
+  background: #ffffff;
+  color: #13294b;
+  font-size: 0.875rem;
+}
+.botao--destaque:hover { background: #efe3c8; }
+.botao--destaque svg { flex: none; }
+
+.consulta__whatsapp {
+  color: var(--sobre-faixa-suave);
+  font-size: 0.9375rem;
+  letter-spacing: 0.08em;
+}
+
+.consulta__garantias {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 2rem;
+  margin-top: 1.25rem;
+}
 .consulta__garantias li {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 0.65rem;
   color: var(--sobre-faixa-suave);
   font-size: 0.9375rem;
 }
-.consulta__garantias svg { width: 20px; height: 20px; flex: none; color: var(--dourado-claro); }
+.consulta__garantias svg { flex: none; color: var(--dourado-claro); }
 .consulta__garantias .estrelas { color: var(--dourado-claro); }
-.consulta__garantias .estrelas svg { width: auto; height: 14px; }
 
-.formulario {
-  display: grid;
-  gap: 1.1rem;
-  padding: clamp(1.5rem, 6vw, 2.75rem);
-  border: 1px solid var(--linha); /* separa o cartão do fundo verde no modo escuro */
-  border-radius: 4px;
-  background: var(--superficie);
-  color: var(--texto);
-  box-shadow: 0 24px 48px -28px rgba(0, 0, 0, 0.45);
-}
-
-.campo { display: grid; gap: 0.4rem; }
-
-.campo label { font-size: 0.875rem; font-weight: 500; letter-spacing: 0.01em; }
-
-.campo input,
-.campo select {
-  display: block;
-  width: 100%;
-  min-height: 3.25rem;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--linha-forte);
-  border-radius: var(--raio);
-  background: var(--fundo);
-  font-size: 1rem; /* 16px evita o zoom automático do iPhone ao tocar no campo */
-  line-height: 1.4;
-  -webkit-appearance: none;
-  appearance: none;
-  transition: border-color 200ms ease, box-shadow 200ms ease;
-}
-.campo input::placeholder { color: var(--texto-suave); opacity: 0.75; }
-.campo input:focus,
-.campo select:focus { border-color: var(--destaque); }
-.campo input::-webkit-date-and-time-value { text-align: left; }
-.campo input::-webkit-calendar-picker-indicator { opacity: 0.6; cursor: pointer; }
-
-.campo select {
-  padding-right: 2.75rem;
-  background-image: var(--seta-select);
-  background-repeat: no-repeat;
-  background-position: right 0.9rem center;
-  background-size: 1.1rem;
-}
-
-.campo [aria-invalid='true'] { border-color: var(--erro); }
-
-.campo__erro,
-.campo__aviso { font-size: 0.8125rem; line-height: 1.45; }
-.campo__erro { color: var(--erro); }
-.campo__erro:empty,
-.campo__aviso:empty { display: none; }
-.campo__aviso { color: var(--dourado-texto); }
-
-.formulario .botao { margin-top: 0.5rem; }
-
-.formulario__nota,
-.formulario__confirmacao {
-  color: var(--texto-suave);
+.consulta__nota {
+  max-width: 26rem;
+  color: var(--sobre-faixa-suave);
   font-size: 0.8125rem;
-  line-height: 1.5;
-  text-align: center;
-}
-.formulario__confirmacao { color: var(--texto); }
-
-@media (min-width: 40em) {
-  .formulario { grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-  .formulario > * { grid-column: 1 / -1; }
-  .formulario > .campo:nth-of-type(1),
-  .formulario > .campo:nth-of-type(2),
-  .formulario > .campo:nth-of-type(4),
-  .formulario > .campo:nth-of-type(5) { grid-column: auto; }
-}
-
-@media (min-width: 56em) {
-  .consulta { grid-template-columns: 5fr 6fr; gap: 5rem; align-items: center; }
+  opacity: 0.85;
 }
 
 /* -----------------------------------------------------------------------------

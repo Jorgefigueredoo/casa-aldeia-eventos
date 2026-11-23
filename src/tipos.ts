@@ -13,7 +13,6 @@ export type Orientacao = 'paisagem' | 'retrato';
 export interface TipoDeEvento {
   id: string;
   nome: string;
-  naMensagem: string;
   descricao?: string;
   cartao: boolean;
   destaque?: boolean;
@@ -98,7 +97,8 @@ export interface DadosEspaco {
   consulta: {
     titulo: string;
     texto: string;
-    modeloDaMensagem: string;
+    botao: string;
+    mensagem: string;
   };
   perguntasFrequentes: { pergunta: string; resposta: string }[];
   localizacao: {
