@@ -155,6 +155,7 @@ a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 1px
 
 button, input, select { font: inherit; color: inherit; }
 button { cursor: pointer; }
+a, button { -webkit-tap-highlight-color: rgba(19, 41, 75, 0.12); }
 
 :focus-visible {
   outline: 2px solid var(--foco);
@@ -188,8 +189,8 @@ button { cursor: pointer; }
   place-items: center;
   background: var(--fundo-alt);
   color: var(--texto-suave);
-  font-size: 0.6875rem;
-  letter-spacing: 0.24em;
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
 }
 
@@ -302,6 +303,9 @@ button { cursor: pointer; }
 }
 
 .topo__marca {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem; /* área de toque mínima de 44px */
   font-family: var(--fonte-titulo);
   font-size: 1.625rem;
   font-weight: 600;
@@ -326,11 +330,21 @@ button { cursor: pointer; }
   transition: background-color 250ms ease, color 250ms ease;
 }
 .topo__acao:hover { background: #ffffff; color: #13294b; }
+.topo__acao { white-space: nowrap; }
+
+/* Celulares bem estreitos (até 359px): tudo do topo numa linha só */
+@media (max-width: 22.49em) {
+  .topo { gap: 0.5rem; }
+  .topo__marca { font-size: 1.375rem; }
+  .topo__acao { padding-inline: 0.75rem; letter-spacing: 0.08em; }
+  .prova__texto { font-size: 0.8125rem; }
+}
 
 @media (min-width: 64em) {
   .topo { padding-block: 1.5rem; }
   .topo__menu { display: flex; gap: 2.25rem; margin-left: auto; margin-right: 1.5rem; }
   .topo__menu a {
+    padding-block: 0.8rem; /* 44px de área de toque em tablets */
     font-size: 0.8125rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -402,6 +416,18 @@ button { cursor: pointer; }
   background: var(--dourado-claro);
 }
 
+/* Celular deitado (tela baixa): topo compacto, para o título, o botão e a
+   faixa de avaliação caberem juntos na primeira tela. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .topo { padding-block: 0.4rem; }
+  .hero { min-height: 0; padding: 3.5rem var(--margem) 1rem; }
+  .hero__titulo { font-size: clamp(2rem, 11vh, 3.25rem); }
+  .hero__slogan { margin: 0.5rem auto 1rem; font-size: 1rem; }
+  .hero__slogan::before { display: none; }
+  .hero .botao { min-height: 2.9rem; padding-block: 0.7rem; }
+  :root { --prova-h: 3.5rem; }
+}
+
 /* -----------------------------------------------------------------------------
    6. FAIXA DE PROVA SOCIAL
    -------------------------------------------------------------------------- */
@@ -434,6 +460,8 @@ a.prova__conteudo:hover .prova__texto { text-decoration: underline; }
 /* No celular, estrelas em cima e texto embaixo: o bloco fica estreito e
    centralizado, sem ficar por baixo do botão flutuante de WhatsApp. */
 @media (max-width: 39.99em) {
+  /* Reserva à direita o espaço do botão flutuante, para ele nunca cobrir a nota */
+  .prova { padding-right: calc(var(--margem) + 3.75rem); }
   .prova__conteudo { flex-direction: column; gap: 0.3rem; }
   .prova__texto { font-size: 0.875rem; line-height: 1.2; }
   .prova__texto strong { font-size: 1.3rem; }
@@ -481,8 +509,10 @@ a.prova__conteudo:hover .prova__texto { text-decoration: underline; }
   object-fit: cover;
   transition: transform 1.4s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
-.evento:hover .evento__foto img,
 .evento:focus-visible .evento__foto img { transform: scale(1.045); }
+@media (hover: hover) {
+  .evento:hover .evento__foto img { transform: scale(1.045); }
+  }
 
 .evento__info { display: block; padding-top: 1rem; }
 
@@ -509,13 +539,12 @@ a.prova__conteudo:hover .prova__texto { text-decoration: underline; }
   gap: 0.4rem;
   margin-top: 0.6rem;
   color: var(--dourado-texto);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 .evento__ver svg { width: 14px; height: 14px; transition: transform 300ms ease; }
-.evento:hover .evento__ver svg { transform: translateX(4px); }
 
 @media (min-width: 40em) {
   .evento__descricao { display: block; }
@@ -604,7 +633,9 @@ a.prova__conteudo:hover .prova__texto { text-decoration: underline; }
   object-fit: cover;
   transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 400ms ease;
 }
-.galeria__botao:hover img { transform: scale(1.05); }
+@media (hover: hover) {
+  .galeria__botao:hover img { transform: scale(1.05); }
+}
 
 /* Lightbox: tela cheia escura */
 .lightbox {
@@ -783,7 +814,7 @@ a.prova__conteudo:hover .prova__texto { text-decoration: underline; }
   padding-top: 1rem;
   border-top: 1px solid var(--linha);
   color: var(--dourado-texto);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -1013,7 +1044,9 @@ a.prova__conteudo:hover .prova__texto { text-decoration: underline; }
   transition: transform 250ms ease, background-color 250ms ease;
   animation: aparecer 500ms ease 800ms both;
 }
-.whatsapp-flutuante:hover { transform: translateY(-2px); background: var(--botao-hover); }
+@media (hover: hover) {
+  .whatsapp-flutuante:hover { transform: translateY(-2px); background: var(--botao-hover); }
+}
 .whatsapp-flutuante svg { width: 1.6rem; height: 1.6rem; }
 
 @media (min-width: 64em) {
