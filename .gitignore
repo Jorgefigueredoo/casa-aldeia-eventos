@@ -1,0 +1,6 @@
+# Dependências e saída do build (gerados, não versionar)
+node_modules/
+dist/
+
+# Fotos originais pesadas (ficam só no seu computador)
+fotos-originais/

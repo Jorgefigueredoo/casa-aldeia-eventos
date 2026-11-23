@@ -1,0 +1,30 @@
+{
+  "name": "casaldeia-eventos",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Site de página única para espaço de eventos (React + TypeScript + Vite, pré-renderizado).",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build && node ferramentas/prerender.mjs",
+    "preview": "vite preview",
+    "verificar": "tsc --noEmit",
+    "fotos": "node ferramentas/preparar-fotos.mjs"
+  },
+  "dependencies": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.3",
+    "@types/react": "19.1.2",
+    "@types/react-dom": "19.1.2",
+    "@vitejs/plugin-react": "4.4.1",
+    "sharp": "0.33.5",
+    "typescript": "5.8.3",
+    "vite": "6.3.5"
+  }
+}
